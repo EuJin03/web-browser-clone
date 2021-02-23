@@ -25,10 +25,10 @@ const Home = () => {
       <div className="home__body">
         <img
           src="https://assets.stickpng.com/images/580b57fcd9996e24bc43c51f.png"
-          alt=""
+          alt="where is the img"
         />
         <div className="home__inputContainer">
-          <Search hideButtons />
+          <Search />
         </div>
       </div>
     </div>

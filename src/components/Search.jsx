@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SearchIcon from "@material-ui/icons/Search";
 import MicIcon from "@material-ui/icons/Mic";
 import { Button } from "@material-ui/core";
@@ -8,8 +8,8 @@ import "../css/Search.css";
 import { useStateValue } from "../StateProvider";
 import { actionTypes } from "../reducer";
 
-const Search = ({ hideButtons = false }) => {
-  const [{ term }, dispatch] = useStateValue();
+const Search = ({ hideButtons, prevValue }) => {
+  const [_, dispatch] = useStateValue();
 
   const [input, setInput] = useState("");
   const history = useHistory();
@@ -17,14 +17,31 @@ const Search = ({ hideButtons = false }) => {
   const search = e => {
     e.preventDefault();
 
-    dispatch({ type: actionTypes.SET_SEARCH_TERM, term: input });
+    if (input && input !== "") {
+      dispatch({ type: actionTypes.SET_SEARCH_TERM, term: input });
 
-    history.push("/search");
+      history.push("/search");
+    }
   };
+
+  useEffect(() => {
+    if (prevValue) {
+      setInput(prevValue);
+    }
+  }, [prevValue]);
+
+  useEffect(() => {
+    const script = document.createElement("script");
+
+    script.src = "https://cse.google.com/cse.js?cx=0c1d3020f2c89205f";
+    script.async = true;
+
+    document.body.appendChild(script);
+  }, []);
 
   return (
     <form className="search">
-      <div className="search__input">
+      <div className="search__input gcse-search" enableAutoComplete="true">
         <SearchIcon className="search__inputIcon" />
         <input
           type="text"
